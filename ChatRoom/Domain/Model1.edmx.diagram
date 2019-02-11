@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="09cd7684c6b94cdea8d5c4a6d38ecd9f" Name="Diagram1" ZoomLevel="77">
+        <EntityTypeShape EntityType="chatdbModel.User" Width="1.5" PointX="11" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="chatdbModel.Friendship" Width="1.5" PointX="4.625" PointY="0.75" />
+        <AssociationConnector Association="chatdbModel.FK1_Friendship_User" />
+        <AssociationConnector Association="chatdbModel.FK2_Friendship_User" />
+        <EntityTypeShape EntityType="chatdbModel.Chatroom_message" Width="2" PointX="3.5" PointY="3.75" />
+        <AssociationConnector Association="chatdbModel.FK_Chatroom_message_ToUser" />
+        <EntityTypeShape EntityType="chatdbModel.Friendship_message" Width="1.5" PointX="6.875" PointY="0.875" />
+        <AssociationConnector Association="chatdbModel.FK_Friendship_message_Friendship" />
+        <AssociationConnector Association="chatdbModel.FK_Friendship_message_User" />
+        <EntityTypeShape EntityType="chatdbModel.User_group" Width="1.5" PointX="14" PointY="1" />
+        <EntityTypeShape EntityType="chatdbModel.User_group_right" Width="1.5" PointX="16.375" PointY="1.375" />
+        <AssociationConnector Association="chatdbModel.FK_User_group_User" />
+        <AssociationConnector Association="chatdbModel.FK_User_group_User_group_right" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

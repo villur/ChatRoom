@@ -1,0 +1,24 @@
+﻿<Window x:Class="ChatRoom.View.FriendWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ChatRoom.View"
+        mc:Ignorable="d"
+        Title="FriendWindow" Height="300" Width="350">
+    <Grid>
+        <ListBox x:Name="chatBoxFriend" ItemsSource="{Binding MsgsBo}" HorizontalAlignment="Left" Height="163" Margin="18,28,0,0" VerticalAlignment="Top" Width="301">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding FormatedMsg}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <TextBox x:Name="txtBoxFriend" HorizontalAlignment="Left" Height="32" Margin="18,227,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="221"/>
+        <Button x:Name="btnSendFriend" Content="Send" HorizontalAlignment="Left" Margin="244,227,0,0" VerticalAlignment="Top" Width="75" IsDefault="True" Click="btnSendFriend_Click"/>
+        <TextBlock x:Name="txtIsSeen" HorizontalAlignment="Left" Height="23" Margin="18,199,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="301"/>
+
+    </Grid>
+</Window>

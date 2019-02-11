@@ -1,0 +1,475 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="chatdbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Chatroom_message">
+          <Key>
+            <PropertyRef Name="Chatroom_message_Id" />
+          </Key>
+          <Property Name="Chatroom_message_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="text" Type="varchar" MaxLength="1000" />
+          <Property Name="sent" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Friendship">
+          <Key>
+            <PropertyRef Name="friendship_id" />
+          </Key>
+          <Property Name="friendship_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user1_id" Type="int" Nullable="false" />
+          <Property Name="user2_id" Type="int" Nullable="false" />
+          <Property Name="started" Type="datetime" Nullable="false" />
+          <Property Name="ended" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Friendship_message">
+          <Key>
+            <PropertyRef Name="friendship_message_id" />
+          </Key>
+          <Property Name="friendship_message_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="friendship_id" Type="int" Nullable="false" />
+          <Property Name="text" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="sent" Type="datetime" Nullable="false" />
+          <Property Name="is_seen" Type="char" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="user_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="username" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="created" Type="datetime" Nullable="false" />
+          <Property Name="closed" Type="datetime" />
+          <Property Name="note" Type="varchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="User_group">
+          <Key>
+            <PropertyRef Name="user_group_id" />
+          </Key>
+          <Property Name="user_group_id" Type="int" Nullable="false" />
+          <Property Name="user_group_right_id" Type="int" />
+          <Property Name="user_id" Type="int" />
+          <Property Name="name" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="User_group_right">
+          <Key>
+            <PropertyRef Name="user_group_right_id" />
+          </Key>
+          <Property Name="user_group_right_id" Type="int" Nullable="false" />
+          <Property Name="right" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <Association Name="FK_Chatroom_message_ToUser">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Chatroom_message" Type="Self.Chatroom_message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="Chatroom_message">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FK1_Friendship_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Friendship" Type="Self.Friendship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="Friendship">
+              <PropertyRef Name="user1_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FK2_Friendship_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Friendship" Type="Self.Friendship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="Friendship">
+              <PropertyRef Name="user2_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Friendship_message_Friendship">
+          <End Role="Friendship" Type="Self.Friendship" Multiplicity="1" />
+          <End Role="Friendship_message" Type="Self.Friendship_message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Friendship">
+              <PropertyRef Name="friendship_id" />
+            </Principal>
+            <Dependent Role="Friendship_message">
+              <PropertyRef Name="friendship_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Friendship_message_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Friendship_message" Type="Self.Friendship_message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="Friendship_message">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_group_User">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="User_group" Type="Self.User_group" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="User_group">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_group_User_group_right">
+          <End Role="User_group_right" Type="Self.User_group_right" Multiplicity="0..1" />
+          <End Role="User_group" Type="Self.User_group" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User_group_right">
+              <PropertyRef Name="user_group_right_id" />
+            </Principal>
+            <Dependent Role="User_group">
+              <PropertyRef Name="user_group_right_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="chatdbModelStoreContainer">
+          <EntitySet Name="Chatroom_message" EntityType="Self.Chatroom_message" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Friendship" EntityType="Self.Friendship" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Friendship_message" EntityType="Self.Friendship_message" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User_group" EntityType="Self.User_group" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User_group_right" EntityType="Self.User_group_right" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Chatroom_message_ToUser" Association="Self.FK_Chatroom_message_ToUser">
+            <End Role="User" EntitySet="User" />
+            <End Role="Chatroom_message" EntitySet="Chatroom_message" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FK1_Friendship_User" Association="Self.FK_FK1_Friendship_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Friendship" EntitySet="Friendship" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FK2_Friendship_User" Association="Self.FK_FK2_Friendship_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Friendship" EntitySet="Friendship" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Friendship_message_Friendship" Association="Self.FK_Friendship_message_Friendship">
+            <End Role="Friendship" EntitySet="Friendship" />
+            <End Role="Friendship_message" EntitySet="Friendship_message" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Friendship_message_User" Association="Self.FK_Friendship_message_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Friendship_message" EntitySet="Friendship_message" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_group_User" Association="Self.FK_User_group_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="User_group" EntitySet="User_group" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_group_User_group_right" Association="Self.FK_User_group_User_group_right">
+            <End Role="User_group_right" EntitySet="User_group_right" />
+            <End Role="User_group" EntitySet="User_group" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="chatdbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="user_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="username" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="created" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="closed" Type="DateTime" Precision="3" />
+          <Property Name="note" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Friendship" Relationship="chatdbModel.FK1_Friendship_User" FromRole="User" ToRole="Friendship" />
+          <NavigationProperty Name="Friendship1" Relationship="chatdbModel.FK2_Friendship_User" FromRole="User" ToRole="Friendship" />
+          <NavigationProperty Name="Chatroom_message" Relationship="chatdbModel.FK_Chatroom_message_ToUser" FromRole="User" ToRole="Chatroom_message" />
+          <NavigationProperty Name="Friendship_message" Relationship="chatdbModel.FK_Friendship_message_User" FromRole="User" ToRole="Friendship_message" />
+          <NavigationProperty Name="User_group" Relationship="chatdbModel.FK_User_group_User" FromRole="User" ToRole="User_group" />
+        </EntityType>
+        <EntityContainer Name="chatdbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="User" EntityType="Self.User" />
+          <EntitySet Name="Friendship" EntityType="chatdbModel.Friendship" />
+          <AssociationSet Name="FK1_Friendship_User" Association="chatdbModel.FK1_Friendship_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Friendship" EntitySet="Friendship" />
+          </AssociationSet>
+          <AssociationSet Name="FK2_Friendship_User" Association="chatdbModel.FK2_Friendship_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Friendship" EntitySet="Friendship" />
+          </AssociationSet>
+          <EntitySet Name="Chatroom_message" EntityType="chatdbModel.Chatroom_message" />
+          <AssociationSet Name="FK_Chatroom_message_ToUser" Association="chatdbModel.FK_Chatroom_message_ToUser">
+            <End Role="User" EntitySet="User" />
+            <End Role="Chatroom_message" EntitySet="Chatroom_message" />
+          </AssociationSet>
+          <EntitySet Name="Friendship_message" EntityType="chatdbModel.Friendship_message" />
+          <AssociationSet Name="FK_Friendship_message_Friendship" Association="chatdbModel.FK_Friendship_message_Friendship">
+            <End Role="Friendship" EntitySet="Friendship" />
+            <End Role="Friendship_message" EntitySet="Friendship_message" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Friendship_message_User" Association="chatdbModel.FK_Friendship_message_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Friendship_message" EntitySet="Friendship_message" />
+          </AssociationSet>
+          <EntitySet Name="User_group" EntityType="chatdbModel.User_group" />
+          <EntitySet Name="User_group_right" EntityType="chatdbModel.User_group_right" />
+          <AssociationSet Name="FK_User_group_User" Association="chatdbModel.FK_User_group_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="User_group" EntitySet="User_group" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_group_User_group_right" Association="chatdbModel.FK_User_group_User_group_right">
+            <End Role="User_group_right" EntitySet="User_group_right" />
+            <End Role="User_group" EntitySet="User_group" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Friendship">
+          <Key>
+            <PropertyRef Name="friendship_id" />
+          </Key>
+          <Property Name="friendship_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user1_id" Type="Int32" Nullable="false" />
+          <Property Name="user2_id" Type="Int32" Nullable="false" />
+          <Property Name="started" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ended" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="User" Relationship="chatdbModel.FK1_Friendship_User" FromRole="Friendship" ToRole="User" />
+          <NavigationProperty Name="User1" Relationship="chatdbModel.FK2_Friendship_User" FromRole="Friendship" ToRole="User" />
+          <NavigationProperty Name="Friendship_message" Relationship="chatdbModel.FK_Friendship_message_Friendship" FromRole="Friendship" ToRole="Friendship_message" />
+        </EntityType>
+        <Association Name="FK1_Friendship_User">
+          <End Type="chatdbModel.User" Role="User" Multiplicity="1" />
+          <End Type="chatdbModel.Friendship" Role="Friendship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="Friendship">
+              <PropertyRef Name="user1_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK2_Friendship_User">
+          <End Type="chatdbModel.User" Role="User" Multiplicity="1" />
+          <End Type="chatdbModel.Friendship" Role="Friendship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="Friendship">
+              <PropertyRef Name="user2_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Chatroom_message">
+          <Key>
+            <PropertyRef Name="Chatroom_message_Id" />
+          </Key>
+          <Property Name="Chatroom_message_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="text" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="sent" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="User" Relationship="chatdbModel.FK_Chatroom_message_ToUser" FromRole="Chatroom_message" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_Chatroom_message_ToUser">
+          <End Type="chatdbModel.User" Role="User" Multiplicity="1" />
+          <End Type="chatdbModel.Chatroom_message" Role="Chatroom_message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="Chatroom_message">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Friendship_message">
+          <Key>
+            <PropertyRef Name="friendship_message_id" />
+          </Key>
+          <Property Name="friendship_message_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="friendship_id" Type="Int32" Nullable="false" />
+          <Property Name="text" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="sent" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="is_seen" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="Friendship" Relationship="chatdbModel.FK_Friendship_message_Friendship" FromRole="Friendship_message" ToRole="Friendship" />
+          <NavigationProperty Name="User" Relationship="chatdbModel.FK_Friendship_message_User" FromRole="Friendship_message" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_Friendship_message_Friendship">
+          <End Type="chatdbModel.Friendship" Role="Friendship" Multiplicity="1" />
+          <End Type="chatdbModel.Friendship_message" Role="Friendship_message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Friendship">
+              <PropertyRef Name="friendship_id" />
+            </Principal>
+            <Dependent Role="Friendship_message">
+              <PropertyRef Name="friendship_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Friendship_message_User">
+          <End Type="chatdbModel.User" Role="User" Multiplicity="1" />
+          <End Type="chatdbModel.Friendship_message" Role="Friendship_message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="Friendship_message">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="User_group">
+          <Key>
+            <PropertyRef Name="user_group_id" />
+          </Key>
+          <Property Name="user_group_id" Type="Int32" Nullable="false" />
+          <Property Name="user_group_right_id" Type="Int32" />
+          <Property Name="user_id" Type="Int32" />
+          <Property Name="name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="User" Relationship="chatdbModel.FK_User_group_User" FromRole="User_group" ToRole="User" />
+          <NavigationProperty Name="User_group_right" Relationship="chatdbModel.FK_User_group_User_group_right" FromRole="User_group" ToRole="User_group_right" />
+        </EntityType>
+        <EntityType Name="User_group_right">
+          <Key>
+            <PropertyRef Name="user_group_right_id" />
+          </Key>
+          <Property Name="user_group_right_id" Type="Int32" Nullable="false" />
+          <Property Name="right" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="User_group" Relationship="chatdbModel.FK_User_group_User_group_right" FromRole="User_group_right" ToRole="User_group" />
+        </EntityType>
+        <Association Name="FK_User_group_User">
+          <End Type="chatdbModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="chatdbModel.User_group" Role="User_group" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="User_group">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_group_User_group_right">
+          <End Type="chatdbModel.User_group_right" Role="User_group_right" Multiplicity="0..1" />
+          <End Type="chatdbModel.User_group" Role="User_group" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User_group_right">
+              <PropertyRef Name="user_group_right_id" />
+            </Principal>
+            <Dependent Role="User_group">
+              <PropertyRef Name="user_group_right_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="chatdbModelStoreContainer" CdmEntityContainer="chatdbEntities">
+          <EntitySetMapping Name="User">
+            <EntityTypeMapping TypeName="chatdbModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="created" ColumnName="created" />
+                <ScalarProperty Name="closed" ColumnName="closed" />
+                <ScalarProperty Name="note" ColumnName="note" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Friendship">
+            <EntityTypeMapping TypeName="chatdbModel.Friendship">
+              <MappingFragment StoreEntitySet="Friendship">
+                <ScalarProperty Name="ended" ColumnName="ended" />
+                <ScalarProperty Name="started" ColumnName="started" />
+                <ScalarProperty Name="user2_id" ColumnName="user2_id" />
+                <ScalarProperty Name="user1_id" ColumnName="user1_id" />
+                <ScalarProperty Name="friendship_id" ColumnName="friendship_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Chatroom_message">
+            <EntityTypeMapping TypeName="chatdbModel.Chatroom_message">
+              <MappingFragment StoreEntitySet="Chatroom_message">
+                <ScalarProperty Name="sent" ColumnName="sent" />
+                <ScalarProperty Name="text" ColumnName="text" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="Chatroom_message_Id" ColumnName="Chatroom_message_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Friendship_message">
+            <EntityTypeMapping TypeName="chatdbModel.Friendship_message">
+              <MappingFragment StoreEntitySet="Friendship_message">
+                <ScalarProperty Name="is_seen" ColumnName="is_seen" />
+                <ScalarProperty Name="sent" ColumnName="sent" />
+                <ScalarProperty Name="text" ColumnName="text" />
+                <ScalarProperty Name="friendship_id" ColumnName="friendship_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="friendship_message_id" ColumnName="friendship_message_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User_group">
+            <EntityTypeMapping TypeName="chatdbModel.User_group">
+              <MappingFragment StoreEntitySet="User_group">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="user_group_right_id" ColumnName="user_group_right_id" />
+                <ScalarProperty Name="user_group_id" ColumnName="user_group_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User_group_right">
+            <EntityTypeMapping TypeName="chatdbModel.User_group_right">
+              <MappingFragment StoreEntitySet="User_group_right">
+                <ScalarProperty Name="right" ColumnName="right" />
+                <ScalarProperty Name="user_group_right_id" ColumnName="user_group_right_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
